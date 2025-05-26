@@ -44,6 +44,9 @@
     button:hover {
       background-color: #45a049;
     }
+    .condition-details {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -62,21 +65,55 @@
       <label>Date de dernière utilisation</label>
       <input type="date" id="dernier" />
 
-      <label>Prochaine utilisation</label>
-      <input type="date" id="prochaine" />
-
       <h3>Équipements</h3>
-      <label>Double toit</label>
-      <select id="double-toit">
-        <option value="bon">Bon</option>
-        <option value="endommagé">Endommagé</option>
-      </select>
 
-      <label>Toit</label>
-      <select id="toit">
-        <option value="bon">Bon</option>
-        <option value="endommagé">Endommagé</option>
-      </select>
+      <fieldset>
+        <legend>Double toit</legend>
+        <label>Présent :</label>
+        <select id="double-toit-present">
+          <option value="oui">Oui</option>
+          <option value="non">Non</option>
+        </select>
+        <label>Endommagé :</label>
+        <select id="double-toit-endommage">
+          <option value="non">Non</option>
+          <option value="oui">Oui</option>
+        </select>
+        <label>Remarque :</label>
+        <input type="text" id="double-toit-remarque" />
+      </fieldset>
+
+      <fieldset>
+        <legend>Toit</legend>
+        <label>Présent :</label>
+        <select id="toit-present">
+          <option value="oui">Oui</option>
+          <option value="non">Non</option>
+        </select>
+        <label>Endommagé :</label>
+        <select id="toit-endommage">
+          <option value="non">Non</option>
+          <option value="oui">Oui</option>
+        </select>
+        <label>Remarque :</label>
+        <input type="text" id="toit-remarque" />
+      </fieldset>
+
+      <fieldset>
+        <legend>Tapis de sol</legend>
+        <label>Présent :</label>
+        <select id="tapis-present">
+          <option value="oui">Oui</option>
+          <option value="non">Non</option>
+        </select>
+        <label>Endommagé :</label>
+        <select id="tapis-endommage">
+          <option value="non">Non</option>
+          <option value="oui">Oui</option>
+        </select>
+        <label>Remarque :</label>
+        <input type="text" id="tapis-remarque" />
+      </fieldset>
 
       <label>Piquets</label>
       <select id="piquets">
@@ -97,12 +134,6 @@
       <select id="maille">
         <option value="oui">Oui</option>
         <option value="non">Non</option>
-      </select>
-
-      <label>Tapis de sol</label>
-      <select id="tapis">
-        <option value="bon">Bon</option>
-        <option value="endommagé">Endommagé</option>
       </select>
 
       <label>Remarques</label>
@@ -129,15 +160,14 @@
           <strong>Tente ${tente.nom}</strong><br>
           Dernier utilisateur : ${tente.utilisateur || '-'}<br>
           Dernière utilisation : ${tente.dernier || '-'}<br>
-          Prochaine utilisation : ${tente.prochaine || '-'}<br>
-          Double toit : ${tente.doubleToit}<br>
-          Toit : ${tente.toit}<br>
+          Double toit : Présent=${tente.doubleToit.present}, Endommagé=${tente.doubleToit.endommage}, Remarque=${tente.doubleToit.remarque}<br>
+          Toit : Présent=${tente.toit.present}, Endommagé=${tente.toit.endommage}, Remarque=${tente.toit.remarque}<br>
+          Tapis de sol : Présent=${tente.tapis.present}, Endommagé=${tente.tapis.endommage}, Remarque=${tente.tapis.remarque}<br>
           Piquets complets : ${tente.piquets}<br>
           Sardines : ${tente.sardines}<br>
           Maquereaux : ${tente.maquereaux}<br>
           Bananes : ${tente.bananes}<br>
           Maillet présent : ${tente.maille}<br>
-          Tapis de sol : ${tente.tapis}<br>
           Remarques : ${tente.remarques || 'Aucune'}
         `;
         liste.appendChild(div);
@@ -150,15 +180,26 @@
         nom: document.getElementById('nom').value,
         utilisateur: document.getElementById('utilisateur').value,
         dernier: document.getElementById('dernier').value,
-        prochaine: document.getElementById('prochaine').value,
-        doubleToit: document.getElementById('double-toit').value,
-        toit: document.getElementById('toit').value,
+        doubleToit: {
+          present: document.getElementById('double-toit-present').value,
+          endommage: document.getElementById('double-toit-endommage').value,
+          remarque: document.getElementById('double-toit-remarque').value,
+        },
+        toit: {
+          present: document.getElementById('toit-present').value,
+          endommage: document.getElementById('toit-endommage').value,
+          remarque: document.getElementById('toit-remarque').value,
+        },
+        tapis: {
+          present: document.getElementById('tapis-present').value,
+          endommage: document.getElementById('tapis-endommage').value,
+          remarque: document.getElementById('tapis-remarque').value,
+        },
         piquets: document.getElementById('piquets').value,
         sardines: document.getElementById('sardines').value,
         maquereaux: document.getElementById('maquereaux').value,
         bananes: document.getElementById('bananes').value,
         maille: document.getElementById('maille').value,
-        tapis: document.getElementById('tapis').value,
         remarques: document.getElementById('remarques').value
       };
       tentes.push(nouvelleTente);
