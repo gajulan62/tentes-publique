@@ -1,163 +1,149 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inventaire Tentes</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f2f2f2;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventaire des tentes</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f7f7f7;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      display: grid;
+      gap: 0.5rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    input, select, textarea, button {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.4rem;
+      text-align: center;
+    }
+    th {
+      background-color: #eee;
+    }
+    @media (max-width: 600px) {
+      table {
+        font-size: 0.8rem;
       }
-      header {
-        background-color: #4caf50;
-        color: white;
-        padding: 1rem;
-        text-align: center;
-      }
-      .container {
-        padding: 1rem;
-      }
-      .tente {
-        background: white;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      }
-      input,
-      select,
-      textarea,
-      button {
-        width: 100%;
-        margin-top: 0.5rem;
-        margin-bottom: 1rem;
-        padding: 0.5rem;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-      }
-      button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #45a049;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>Inventaire des Tentes</h1>
-    </header>
-    <div class="container">
-      <h2>Ajouter une tente</h2>
-      <form id="form-tente">
-        <input
-          type="text"
-          placeholder="Nom ou ID de la tente"
-          id="nom"
-          required
-        />
-        <label>Dernière utilisation</label>
-        <input type="date" id="dernier" />
-        <label>Prochaine utilisation</label>
-        <input type="date" id="prochaine" />
+    }
+  </style>
+</head>
+<body>
 
-        <h3>Équipements</h3>
-        <label>Double toit</label>
-        <select id="double-toit">
-          <option value="bon">Bon</option>
-          <option value="endommagé">Endommagé</option>
-        </select>
+<h1>Inventaire des tentes</h1>
 
-        <label>Toit</label>
-        <select id="toit">
-          <option value="bon">Bon</option>
-          <option value="endommagé">Endommagé</option>
-        </select>
+<form id="tenteForm">
+  <input name="nom" placeholder="Nom de la tente" required />
+  <input name="dernier" type="date" placeholder="Dernière utilisation" />
+  <input name="prochaine" type="date" placeholder="Prochaine utilisation" />
+  <input name="doubleToit" placeholder="Double toit (oui/non)" />
+  <input name="toit" placeholder="Toit (oui/non)" />
+  <input name="piquets" placeholder="Nombre de piquets" type="number" />
+  <input name="maquereaux" placeholder="Nombre de maquereaux" type="number" />
+  <input name="sardines" placeholder="Nombre de sardines" type="number" />
+  <input name="maille" placeholder="Maille (oui/non)" />
+  <input name="tapis" placeholder="Tapis de sol (oui/non)" />
+  <textarea name="remarques" placeholder="Remarques (équipement abîmé...)" rows="2"></textarea>
+  <button type="submit">Ajouter</button>
+</form>
 
-        <label>Piquets (nombre)</label>
-        <input type="number" id="piquets" />
-        <label>Maquereaux (nombre)</label>
-        <input type="number" id="maquereaux" />
-        <label>Sardines (nombre)</label>
-        <input type="number" id="sardines" />
+<h2>Liste des tentes</h2>
+<table id="tenteTable">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Dernière</th>
+      <th>Prochaine</th>
+      <th>D. Toit</th>
+      <th>Toit</th>
+      <th>Piquets</th>
+      <th>Maquereaux</th>
+      <th>Sardines</th>
+      <th>Maille</th>
+      <th>Tapis</th>
+      <th>Remarques</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-        <label>Maillé</label>
-        <select id="maille">
-          <option value="bon">Bon</option>
-          <option value="endommagé">Endommagé</option>
-        </select>
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyGoX9LaQPPwv1IdOnwzghlfe8wdNQbJz-jrmc4gp4n9hBbUlFpZ_OEhu2FDZN84P-E/exec ";
+  const sheetJSON = "https://opensheet.elk.sh/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/Inventaire-Tentes ";
 
-        <label>Tapis de sol</label>
-        <select id="tapis">
-          <option value="bon">Bon</option>
-          <option value="endommagé">Endommagé</option>
-        </select>
+  const form = document.getElementById("tenteForm");
+  const tableBody = document.querySelector("#tenteTable tbody");
 
-        <label>Remarques</label>
-        <textarea id="remarques"></textarea>
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
-        <button type="submit">Ajouter la tente</button>
-      </form>
-
-      <h2>Liste des tentes</h2>
-      <div id="liste-tentes"></div>
-    </div>
-
-    <script>
-      const form = document.getElementById("form-tente");
-      const liste = document.getElementById("liste-tentes");
-      let tentes = JSON.parse(localStorage.getItem("tentes")) || [];
-
-      function renderTentes() {
-        liste.innerHTML = "";
-        tentes.forEach((tente, index) => {
-          const div = document.createElement("div");
-          div.className = "tente";
-          div.innerHTML = `
-          <strong>${tente.nom}</strong><br>
-          Dernière utilisation : ${tente.dernier || "-"}<br>
-          Prochaine utilisation : ${tente.prochaine || "-"}<br>
-          Double toit : ${tente.doubleToit}<br>
-          Toit : ${tente.toit}<br>
-          Piquets : ${tente.piquets}<br>
-          Maquereaux : ${tente.maquereaux}<br>
-          Sardines : ${tente.sardines}<br>
-          Maillé : ${tente.maille}<br>
-          Tapis de sol : ${tente.tapis}<br>
-          Remarques : ${tente.remarques || "Aucune"}
-        `;
-          liste.appendChild(div);
-        });
-      }
-
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const nouvelleTente = {
-          nom: document.getElementById("nom").value,
-          dernier: document.getElementById("dernier").value,
-          prochaine: document.getElementById("prochaine").value,
-          doubleToit: document.getElementById("double-toit").value,
-          toit: document.getElementById("toit").value,
-          piquets: document.getElementById("piquets").value,
-          maquereaux: document.getElementById("maquereaux").value,
-          sardines: document.getElementById("sardines").value,
-          maille: document.getElementById("maille").value,
-          tapis: document.getElementById("tapis").value,
-          remarques: document.getElementById("remarques").value,
-        };
-        tentes.push(nouvelleTente);
-        localStorage.setItem("tentes", JSON.stringify(tentes));
-        form.reset();
-        renderTentes();
+    try {
+      await fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
       });
+      alert("Tente ajoutée !");
+      form.reset();
+      loadTentes(); // recharger le tableau
+    } catch (err) {
+      alert("Erreur d'envoi !");
+      console.error(err);
+    }
+  });
 
-      renderTentes();
-    </script>
-  </body>
+  async function loadTentes() {
+    try {
+      const res = await fetch(sheetJSON);
+      const data = await res.json();
+      tableBody.innerHTML = "";
+      data.forEach(tente => {
+        const row = `<tr>
+          <td>${tente.nom || ""}</td>
+          <td>${tente.dernier || ""}</td>
+          <td>${tente.prochaine || ""}</td>
+          <td>${tente.doubleToit || ""}</td>
+          <td>${tente.toit || ""}</td>
+          <td>${tente.piquets || ""}</td>
+          <td>${tente.maquereaux || ""}</td>
+          <td>${tente.sardines || ""}</td>
+          <td>${tente.maille || ""}</td>
+          <td>${tente.tapis || ""}</td>
+          <td>${tente.remarques || ""}</td>
+        </tr>`;
+        tableBody.insertAdjacentHTML("beforeend", row);
+      });
+    } catch (e) {
+      console.error("Erreur lors du chargement des données", e);
+    }
+  }
+
+  // Chargement initial
+  loadTentes();
+</script>
+
+</body>
 </html>
