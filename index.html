@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventaire Tentes</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+      header {
+        background-color: #4caf50;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+      .container {
+        padding: 1rem;
+      }
+      .tente {
+        background: white;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      input,
+      select,
+      textarea,
+      button {
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Inventaire des Tentes</h1>
+    </header>
+    <div class="container">
+      <h2>Ajouter une tente</h2>
+      <form id="form-tente">
+        <input
+          type="text"
+          placeholder="Nom ou ID de la tente"
+          id="nom"
+          required
+        />
+        <label>Dernière utilisation</label>
+        <input type="date" id="dernier" />
+        <label>Prochaine utilisation</label>
+        <input type="date" id="prochaine" />
+
+        <h3>Équipements</h3>
+        <label>Double toit</label>
+        <select id="double-toit">
+          <option value="bon">Bon</option>
+          <option value="endommagé">Endommagé</option>
+        </select>
+
+        <label>Toit</label>
+        <select id="toit">
+          <option value="bon">Bon</option>
+          <option value="endommagé">Endommagé</option>
+        </select>
+
+        <label>Piquets (nombre)</label>
+        <input type="number" id="piquets" />
+        <label>Maquereaux (nombre)</label>
+        <input type="number" id="maquereaux" />
+        <label>Sardines (nombre)</label>
+        <input type="number" id="sardines" />
+
+        <label>Maillé</label>
+        <select id="maille">
+          <option value="bon">Bon</option>
+          <option value="endommagé">Endommagé</option>
+        </select>
+
+        <label>Tapis de sol</label>
+        <select id="tapis">
+          <option value="bon">Bon</option>
+          <option value="endommagé">Endommagé</option>
+        </select>
+
+        <label>Remarques</label>
+        <textarea id="remarques"></textarea>
+
+        <button type="submit">Ajouter la tente</button>
+      </form>
+
+      <h2>Liste des tentes</h2>
+      <div id="liste-tentes"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById("form-tente");
+      const liste = document.getElementById("liste-tentes");
+      let tentes = JSON.parse(localStorage.getItem("tentes")) || [];
+
+      function renderTentes() {
+        liste.innerHTML = "";
+        tentes.forEach((tente, index) => {
+          const div = document.createElement("div");
+          div.className = "tente";
+          div.innerHTML = `
+          <strong>${tente.nom}</strong><br>
+          Dernière utilisation : ${tente.dernier || "-"}<br>
+          Prochaine utilisation : ${tente.prochaine || "-"}<br>
+          Double toit : ${tente.doubleToit}<br>
+          Toit : ${tente.toit}<br>
+          Piquets : ${tente.piquets}<br>
+          Maquereaux : ${tente.maquereaux}<br>
+          Sardines : ${tente.sardines}<br>
+          Maillé : ${tente.maille}<br>
+          Tapis de sol : ${tente.tapis}<br>
+          Remarques : ${tente.remarques || "Aucune"}
+        `;
+          liste.appendChild(div);
+        });
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const nouvelleTente = {
+          nom: document.getElementById("nom").value,
+          dernier: document.getElementById("dernier").value,
+          prochaine: document.getElementById("prochaine").value,
+          doubleToit: document.getElementById("double-toit").value,
+          toit: document.getElementById("toit").value,
+          piquets: document.getElementById("piquets").value,
+          maquereaux: document.getElementById("maquereaux").value,
+          sardines: document.getElementById("sardines").value,
+          maille: document.getElementById("maille").value,
+          tapis: document.getElementById("tapis").value,
+          remarques: document.getElementById("remarques").value,
+        };
+        tentes.push(nouvelleTente);
+        localStorage.setItem("tentes", JSON.stringify(tentes));
+        form.reset();
+        renderTentes();
+      });
+
+      renderTentes();
+    </script>
+  </body>
+</html>
