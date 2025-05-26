@@ -1,51 +1,59 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inventaire Tentes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
       padding: 0;
-      background-color: #f2f2f2;
     }
     header {
-      background-color: #4CAF50;
+      background: #4CAF50;
       color: white;
-      padding: 1rem;
       text-align: center;
+      padding: 1em;
     }
     .container {
-      padding: 1rem;
+      padding: 1em;
     }
-    .tente {
+    .form-section {
       background: white;
-      margin-bottom: 1rem;
-      padding: 1rem;
+      padding: 1em;
+      border-radius: 8px;
+      margin-bottom: 1em;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    select, input[type="text"], input[type="number"], input[type="date"], textarea {
+      width: 100%;
+      padding: 0.5em;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 1em;
+      padding: 0.7em 1.5em;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tent-entry {
+      background: white;
+      margin-bottom: 1em;
+      padding: 1em;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    input, select, textarea, button {
-      width: 100%;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .condition-details {
-      display: none;
+    .equipment-item {
+      margin-left: 1em;
     }
   </style>
 </head>
@@ -54,136 +62,114 @@
     <h1>Inventaire des Tentes</h1>
   </header>
   <div class="container">
-    <h2>Ajouter une tente</h2>
-    <form id="form-tente">
-      <label>Numéro de la tente</label>
-      <input type="text" id="nom" required />
+    <div class="form-section">
+      <label>Numéro de la tente:
+        <input type="text" id="nom" required>
+      </label>
+      <label>Dernier utilisateur:
+        <input type="text" id="utilisateur">
+      </label>
+      <label>Date de dernière utilisation:
+        <input type="date" id="dernier">
+      </label>
 
-      <label>Dernier utilisateur</label>
-      <input type="text" id="utilisateur" />
-
-      <label>Date de dernière utilisation</label>
-      <input type="date" id="dernier" />
-
-      <h3>Équipements</h3>
-
-      <fieldset>
-        <legend>Double toit</legend>
-        <label>Présent :</label>
-        <select id="double-toit-present">
+      <h3>Double toit</h3>
+      <label>Présent:
+        <select id="doubleToit-present">
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
-        <label>Endommagé :</label>
-        <select id="double-toit-endommage">
+      </label>
+      <label>Endommagé:
+        <select id="doubleToit-endommage">
           <option value="non">Non</option>
           <option value="oui">Oui</option>
         </select>
-        <label>Remarque :</label>
-        <input type="text" id="double-toit-remarque" />
-      </fieldset>
+      </label>
+      <label>Remarque:
+        <input type="text" id="doubleToit-remarque">
+      </label>
 
-      <fieldset>
-        <legend>Toit</legend>
-        <label>Présent :</label>
+      <h3>Toit</h3>
+      <label>Présent:
         <select id="toit-present">
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
-        <label>Endommagé :</label>
+      </label>
+      <label>Endommagé:
         <select id="toit-endommage">
           <option value="non">Non</option>
           <option value="oui">Oui</option>
         </select>
-        <label>Remarque :</label>
-        <input type="text" id="toit-remarque" />
-      </fieldset>
+      </label>
+      <label>Remarque:
+        <input type="text" id="toit-remarque">
+      </label>
 
-      <fieldset>
-        <legend>Tapis de sol</legend>
-        <label>Présent :</label>
+      <h3>Tapis de sol</h3>
+      <label>Présent:
         <select id="tapis-present">
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
-        <label>Endommagé :</label>
+      </label>
+      <label>Endommagé:
         <select id="tapis-endommage">
           <option value="non">Non</option>
           <option value="oui">Oui</option>
         </select>
-        <label>Remarque :</label>
-        <input type="text" id="tapis-remarque" />
-      </fieldset>
+      </label>
+      <label>Remarque:
+        <input type="text" id="tapis-remarque">
+      </label>
 
-      <label>Piquets</label>
-      <select id="piquets">
-        <option value="oui">Complet</option>
-        <option value="non">Incomplet</option>
-      </select>
+      <label>Piquets complets ?
+        <select id="piquets">
+          <option value="oui">Oui</option>
+          <option value="non">Non</option>
+        </select>
+      </label>
 
-      <label>Nombre de sardines</label>
-      <input type="number" id="sardines" />
+      <label>Nombre de sardines:
+        <input type="number" id="sardines">
+      </label>
 
-      <label>Nombre de maquereaux</label>
-      <input type="number" id="maquereaux" />
+      <label>Nombre de maquereaux:
+        <input type="number" id="maquereaux">
+      </label>
 
-      <label>Nombre de bananes</label>
-      <input type="number" id="bananes" />
+      <label>Nombre de bananes:
+        <input type="number" id="bananes">
+      </label>
 
-      <label>Maillet présent</label>
-      <select id="maille">
-        <option value="oui">Oui</option>
-        <option value="non">Non</option>
-      </select>
+      <label>Maillet présent ?
+        <select id="maille">
+          <option value="oui">Oui</option>
+          <option value="non">Non</option>
+        </select>
+      </label>
 
-      <label>Remarques</label>
-      <textarea id="remarques"></textarea>
+      <label>Remarques:
+        <textarea id="remarques"></textarea>
+      </label>
 
-      <button type="submit">Ajouter la tente</button>
-    </form>
+      <button onclick="ajouterTente()">Ajouter la tente</button>
+    </div>
 
-    <h2>Liste des tentes</h2>
-    <div id="liste-tentes"></div>
+    <div id="listeTentes"></div>
   </div>
 
   <script>
-    const form = document.getElementById('form-tente');
-    const liste = document.getElementById('liste-tentes');
-    let tentes = JSON.parse(localStorage.getItem('tentes')) || [];
-
-    function renderTentes() {
-      liste.innerHTML = '';
-      tentes.forEach((tente, index) => {
-        const div = document.createElement('div');
-        div.className = 'tente';
-        div.innerHTML = `
-          <strong>Tente ${tente.nom}</strong><br>
-          Dernier utilisateur : ${tente.utilisateur || '-'}<br>
-          Dernière utilisation : ${tente.dernier || '-'}<br>
-          Double toit : Présent=${tente.doubleToit.present}, Endommagé=${tente.doubleToit.endommage}, Remarque=${tente.doubleToit.remarque}<br>
-          Toit : Présent=${tente.toit.present}, Endommagé=${tente.toit.endommage}, Remarque=${tente.toit.remarque}<br>
-          Tapis de sol : Présent=${tente.tapis.present}, Endommagé=${tente.tapis.endommage}, Remarque=${tente.tapis.remarque}<br>
-          Piquets complets : ${tente.piquets}<br>
-          Sardines : ${tente.sardines}<br>
-          Maquereaux : ${tente.maquereaux}<br>
-          Bananes : ${tente.bananes}<br>
-          Maillet présent : ${tente.maille}<br>
-          Remarques : ${tente.remarques || 'Aucune'}
-        `;
-        liste.appendChild(div);
-      });
-    }
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nouvelleTente = {
+    function ajouterTente() {
+      const tente = {
         nom: document.getElementById('nom').value,
         utilisateur: document.getElementById('utilisateur').value,
         dernier: document.getElementById('dernier').value,
         doubleToit: {
-          present: document.getElementById('double-toit-present').value,
-          endommage: document.getElementById('double-toit-endommage').value,
-          remarque: document.getElementById('double-toit-remarque').value,
+          present: document.getElementById('doubleToit-present').value,
+          endommage: document.getElementById('doubleToit-endommage').value,
+          remarque: document.getElementById('doubleToit-remarque').value,
         },
         toit: {
           present: document.getElementById('toit-present').value,
@@ -202,13 +188,27 @@
         maille: document.getElementById('maille').value,
         remarques: document.getElementById('remarques').value
       };
-      tentes.push(nouvelleTente);
-      localStorage.setItem('tentes', JSON.stringify(tentes));
-      form.reset();
-      renderTentes();
-    });
 
-    renderTentes();
+      const liste = document.getElementById('listeTentes');
+      const div = document.createElement('div');
+      div.className = 'tent-entry';
+      div.innerHTML = `
+        <strong>Tente #${tente.nom}</strong><br>
+        Dernier utilisateur : ${tente.utilisateur} <br>
+        Date dernière utilisation : ${tente.dernier}<br>
+
+        <div class="equipment-item"><strong>Double toit</strong>: ${tente.doubleToit.present} / Endommagé: ${tente.doubleToit.endommage} (${tente.doubleToit.remarque})</div>
+        <div class="equipment-item"><strong>Toit</strong>: ${tente.toit.present} / Endommagé: ${tente.toit.endommage} (${tente.toit.remarque})</div>
+        <div class="equipment-item"><strong>Tapis</strong>: ${tente.tapis.present} / Endommagé: ${tente.tapis.endommage} (${tente.tapis.remarque})</div>
+        <div class="equipment-item"><strong>Piquets complets:</strong> ${tente.piquets}</div>
+        <div class="equipment-item"><strong>Sardines:</strong> ${tente.sardines}</div>
+        <div class="equipment-item"><strong>Maquereaux:</strong> ${tente.maquereaux}</div>
+        <div class="equipment-item"><strong>Bananes:</strong> ${tente.bananes}</div>
+        <div class="equipment-item"><strong>Maillet présent:</strong> ${tente.maille}</div>
+        <div class="equipment-item"><strong>Remarques:</strong> ${tente.remarques}</div>
+      `;
+      liste.appendChild(div);
+    }
   </script>
 </body>
 </html>
