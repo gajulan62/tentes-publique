@@ -31,7 +31,7 @@
       display: block;
       margin-top: 10px;
     }
-    select, input[type="text"], input[type="number"], input[type="date"], textarea {
+    select, input[type="text"], input[type="number"], textarea {
       width: 100%;
       padding: 0.5em;
       margin-top: 5px;
@@ -68,9 +68,6 @@
       </label>
       <label>Dernier utilisateur:
         <input type="text" id="utilisateur">
-      </label>
-      <label>Date de dernière utilisation:
-        <input type="date" id="dernier">
       </label>
 
       <h3>Double toit</h3>
@@ -165,7 +162,6 @@
       const tente = {
         nom: document.getElementById('nom').value,
         utilisateur: document.getElementById('utilisateur').value,
-        dernier: document.getElementById('dernier').value,
         doubleToit: {
           present: document.getElementById('doubleToit-present').value,
           endommage: document.getElementById('doubleToit-endommage').value,
@@ -195,8 +191,6 @@
       div.innerHTML = `
         <strong>Tente #${tente.nom}</strong><br>
         Dernier utilisateur : ${tente.utilisateur} <br>
-        Date dernière utilisation : ${tente.dernier}<br>
-
         <div class="equipment-item"><strong>Double toit</strong>: ${tente.doubleToit.present} / Endommagé: ${tente.doubleToit.endommage} (${tente.doubleToit.remarque})</div>
         <div class="equipment-item"><strong>Toit</strong>: ${tente.toit.present} / Endommagé: ${tente.toit.endommage} (${tente.toit.remarque})</div>
         <div class="equipment-item"><strong>Tapis</strong>: ${tente.tapis.present} / Endommagé: ${tente.tapis.endommage} (${tente.tapis.remarque})</div>
