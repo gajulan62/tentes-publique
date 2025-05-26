@@ -24,7 +24,7 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       margin-bottom: 2rem;
     }
-    input, select, textarea, button {
+    select, input, textarea, button {
       padding: 0.5rem;
       border-radius: 5px;
       border: 1px solid #ccc;
@@ -57,93 +57,23 @@
   <input name="nom" placeholder="Nom de la tente" required />
   <input name="dernier" type="date" placeholder="Dernière utilisation" />
   <input name="prochaine" type="date" placeholder="Prochaine utilisation" />
-  <input name="doubleToit" placeholder="Double toit (oui/non)" />
-  <input name="toit" placeholder="Toit (oui/non)" />
-  <input name="piquets" placeholder="Nombre de piquets" type="number" />
-  <input name="maquereaux" placeholder="Nombre de maquereaux" type="number" />
-  <input name="sardines" placeholder="Nombre de sardines" type="number" />
-  <input name="maille" placeholder="Maille (oui/non)" />
-  <input name="tapis" placeholder="Tapis de sol (oui/non)" />
-  <textarea name="remarques" placeholder="Remarques (équipement abîmé...)" rows="2"></textarea>
-  <button type="submit">Ajouter</button>
-</form>
 
-<h2>Liste des tentes</h2>
-<table id="tenteTable">
-  <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Dernière</th>
-      <th>Prochaine</th>
-      <th>D. Toit</th>
-      <th>Toit</th>
-      <th>Piquets</th>
-      <th>Maquereaux</th>
-      <th>Sardines</th>
-      <th>Maille</th>
-      <th>Tapis</th>
-      <th>Remarques</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <label>Double toit :
+    <select name="doubleToit">
+      <option value="">--</option>
+      <option value="oui">Oui</option>
+      <option value="non">Non</option>
+    </select>
+  </label>
+  <label>Double toit endommagé :
+    <select name="doubleToitEndommage">
+      <option value="">--</option>
+      <option value="oui">Oui</option>
+      <option value="non">Non</option>
+    </select>
+  </label>
 
-<script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyGoX9LaQPPwv1IdOnwzghlfe8wdNQbJz-jrmc4gp4n9hBbUlFpZ_OEhu2FDZN84P-E/exec ";
-  const sheetJSON = "https://opensheet.elk.sh/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/Inventaire-Tentes ";
-
-  const form = document.getElementById("tenteForm");
-  const tableBody = document.querySelector("#tenteTable tbody");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    try {
-      await fetch(scriptURL, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      });
-      alert("Tente ajoutée !");
-      form.reset();
-      loadTentes(); // recharger le tableau
-    } catch (err) {
-      alert("Erreur d'envoi !");
-      console.error(err);
-    }
-  });
-
-  async function loadTentes() {
-    try {
-      const res = await fetch(sheetJSON);
-      const data = await res.json();
-      tableBody.innerHTML = "";
-      data.forEach(tente => {
-        const row = `<tr>
-          <td>${tente.nom || ""}</td>
-          <td>${tente.dernier || ""}</td>
-          <td>${tente.prochaine || ""}</td>
-          <td>${tente.doubleToit || ""}</td>
-          <td>${tente.toit || ""}</td>
-          <td>${tente.piquets || ""}</td>
-          <td>${tente.maquereaux || ""}</td>
-          <td>${tente.sardines || ""}</td>
-          <td>${tente.maille || ""}</td>
-          <td>${tente.tapis || ""}</td>
-          <td>${tente.remarques || ""}</td>
-        </tr>`;
-        tableBody.insertAdjacentHTML("beforeend", row);
-      });
-    } catch (e) {
-      console.error("Erreur lors du chargement des données", e);
-    }
-  }
-
-  // Chargement initial
-  loadTentes();
-</script>
-
-</body>
-</html>
+  <label>Toit :
+    <select name="toit">
+      <option value="">--</option>
+      <opti
