@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inventaire GTR Tentes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventaire 3 Tentes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -69,6 +69,10 @@
     <h1>Inventaire des Tentes</h1>
   </header>
   <div class="container">
+    <div style="text-align: right; margin-bottom: 1em;">
+      <button onclick="ouvrirInventaire()">Afficher toutes les tentes</button>
+    </div>
+
     <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
       <label>Numéro de la tente:
         <input type="text" id="nom" required>
@@ -162,7 +166,6 @@
       </label>
 
       <button type="submit">Ajouter la tente</button>
-      <button type="button" onclick="chargerDonnees()">Afficher toutes les tentes</button>
     </form>
 
     <div id="listeTentesContainer">
@@ -173,7 +176,6 @@
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyVIYGEs4u_5R2kvFwfITAv03B6FLqSpRHQt3qrCreCKxGv6VoNzAmOodFkLXQNteUI/exec";
-    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6z4xxlNQKwUYYFteyfuS-qY4r6taZ_BpSk8ZjhwALrA2UoLWmiGoDdli6BqniEhDI0IqRfpOhx7QN/pub?output=csv";
 
     function ajouterTente() {
       const requiredFields = [
@@ -232,54 +234,8 @@
         body: JSON.stringify(tente)
       }).then(() => {
         alert("Tente ajoutée avec succès !");
-        afficherTente(tente); // Affiche immédiatement la nouvelle tente
         document.querySelector('form.form-section').reset();
       });
-    }
-
-    function chargerDonnees() {
-      fetch(sheetURL)
-        .then(response => response.text())
-        .then(text => {
-          const rows = text.trim().split('\n');
-          const headers = rows[0].split(',');
-          const data = rows.slice(1);
-          const liste = document.getElementById('listeTentes');
-          liste.innerHTML = '';
-
-          data.forEach(row => {
-            const cols = row.split(',');
-            const tente = {
-              nom: cols[0],
-              utilisateur: cols[1],
-              doubleToit: {
-                present: cols[2],
-                endommage: cols[3],
-                remarque: cols[4],
-              },
-              toit: {
-                present: cols[5],
-                endommage: cols[6],
-                remarque: cols[7],
-              },
-              tapis: {
-                present: cols[8],
-                endommage: cols[9],
-                remarque: cols[10],
-              },
-              piquets: cols[11],
-              sardines: cols[12],
-              maquereaux: cols[13],
-              bananes: cols[14],
-              maille: cols[15],
-              remarques: cols[16],
-              date: cols[17]
-            };
-            afficherTente(tente);
-          });
-
-          document.getElementById('listeTentesContainer').scrollIntoView({ behavior: 'smooth' });
-        });
     }
 
     function afficherTente(tente) {
@@ -301,6 +257,50 @@
         <div class="equipment-item"><strong>Date d'ajout:</strong> ${new Date(tente.date).toLocaleString('fr-FR')}</div>
       `;
       liste.appendChild(div);
+    }
+
+    function ouvrirInventaire() {
+      const urlCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6z4xxlNQKwUYYFteyfuS-qY4r6taZ_BpSk8ZjhwALrA2UoLWmiGoDdli6BqniEhDI0IqRfpOhx7QN/pub?output=csv";
+
+      fetch(urlCSV)
+        .then(response => response.text())
+        .then(csvText => {
+          const rows = csvText.trim().split('\n').map(row => row.split(','));
+          const headers = rows[0];
+          const data = rows.slice(1);
+
+          let tableHTML = '<html><head><title>Inventaire Tentes</title><style>';
+          tableHTML += 'body { font-family: Arial; padding: 2em; background: #f9f9f9; }';
+          tableHTML += 'table { border-collapse: collapse; width: 100%; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.1); }';
+          tableHTML += 'th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }';
+          tableHTML += 'th { background-color: #4CAF50; color: white; }';
+          tableHTML += '</style></head><body>';
+          tableHTML += '<h2>Inventaire complet des tentes</h2>';
+          tableHTML += '<table><thead><tr>';
+
+          headers.forEach(header => {
+            tableHTML += `<th>${header.trim()}</th>`;
+          });
+          tableHTML += '</tr></thead><tbody>';
+
+          data.forEach(row => {
+            tableHTML += '<tr>';
+            row.forEach(cell => {
+              tableHTML += `<td>${cell.trim()}</td>`;
+            });
+            tableHTML += '</tr>';
+          });
+
+          tableHTML += '</tbody></table>';
+          tableHTML += '</body></html>';
+
+          const newWindow = window.open();
+          newWindow.document.write(tableHTML);
+          newWindow.document.close();
+        })
+        .catch(err => {
+          alert("Erreur lors du chargement de l'inventaire : " + err);
+        });
     }
   </script>
 </body>
