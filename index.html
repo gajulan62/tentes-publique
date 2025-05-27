@@ -182,7 +182,8 @@
         maquereaux: document.getElementById('maquereaux').value,
         bananes: document.getElementById('bananes').value,
         maille: document.getElementById('maille').value,
-        remarques: document.getElementById('remarques').value
+        remarques: document.getElementById('remarques').value,
+        date: new Date().toISOString()
       };
 
       fetch("https://script.google.com/macros/s/AKfycbyVIYGEs4u_5R2kvFwfITAv03B6FLqSpRHQt3qrCreCKxGv6VoNzAmOodFkLXQNteUI/exec", {
@@ -211,6 +212,7 @@
         <div class="equipment-item"><strong>Bananes:</strong> ${tente.bananes}</div>
         <div class="equipment-item"><strong>Maillet présent:</strong> ${tente.maille}</div>
         <div class="equipment-item"><strong>Remarques:</strong> ${tente.remarques}</div>
+        <div class="equipment-item"><strong>Date d'ajout:</strong> ${new Date(tente.date).toLocaleString('fr-FR')}</div>
       `;
       liste.appendChild(div);
     }
