@@ -36,6 +36,10 @@
       padding: 0.5em;
       margin-top: 5px;
     }
+    .error {
+      border: 2px solid red;
+      background-color: #ffe6e6;
+    }
     button {
       margin-top: 1em;
       padding: 0.7em 1.5em;
@@ -169,12 +173,21 @@
       const requiredFields = [
         'nom', 'utilisateur', 'doubleToit-present', 'toit-present', 'sardines', 'maquereaux', 'bananes', 'maille'
       ];
+      let valid = true;
+
       for (const id of requiredFields) {
         const el = document.getElementById(id);
         if (!el.value) {
-          alert("Veuillez remplir tous les champs obligatoires.");
-          return;
+          el.classList.add("error");
+          valid = false;
+        } else {
+          el.classList.remove("error");
         }
+      }
+
+      if (!valid) {
+        alert("Veuillez remplir tous les champs obligatoires.");
+        return;
       }
 
       const tente = {
