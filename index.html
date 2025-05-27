@@ -73,93 +73,10 @@
       <label>Dernier utilisateur:
         <input type="text" id="utilisateur" required>
       </label>
-
-      <h3>Double toit</h3>
-      <label>Présent:
-        <select id="doubleToit-present" required>
-          <option value="">-- Sélectionner --</option>
-          <option value="oui">Oui</option>
-          <option value="non">Non</option>
-        </select>
-      </label>
-      <label>Endommagé:
-        <select id="doubleToit-endommage">
-          <option value="non">Non</option>
-          <option value="oui">Oui</option>
-        </select>
-      </label>
-      <label>Remarque:
-        <input type="text" id="doubleToit-remarque">
-      </label>
-
-      <h3>Toit</h3>
-      <label>Présent:
-        <select id="toit-present" required>
-          <option value="">-- Sélectionner --</option>
-          <option value="oui">Oui</option>
-          <option value="non">Non</option>
-        </select>
-      </label>
-      <label>Endommagé:
-        <select id="toit-endommage">
-          <option value="non">Non</option>
-          <option value="oui">Oui</option>
-        </select>
-      </label>
-      <label>Remarque:
-        <input type="text" id="toit-remarque">
-      </label>
-
-      <h3>Tapis de sol</h3>
-      <label>Présent:
-        <select id="tapis-present">
-          <option value="oui">Oui</option>
-          <option value="non">Non</option>
-        </select>
-      </label>
-      <label>Endommagé:
-        <select id="tapis-endommage">
-          <option value="non">Non</option>
-          <option value="oui">Oui</option>
-        </select>
-      </label>
-      <label>Remarque:
-        <input type="text" id="tapis-remarque">
-      </label>
-
-      <label>Piquets complets ?
-        <select id="piquets">
-          <option value="oui">Oui</option>
-          <option value="non">Non</option>
-        </select>
-      </label>
-
-      <label>Nombre de sardines:
-        <input type="number" id="sardines" required>
-      </label>
-
-      <label>Nombre de maquereaux:
-        <input type="number" id="maquereaux" required>
-      </label>
-
-      <label>Nombre de bananes:
-        <input type="number" id="bananes" required>
-      </label>
-
-      <label>Maillet présent ?
-        <select id="maille" required>
-          <option value="">-- Sélectionner --</option>
-          <option value="oui">Oui</option>
-          <option value="non">Non</option>
-        </select>
-      </label>
-
-      <label>Remarques:
-        <textarea id="remarques"></textarea>
-      </label>
-
+      ...
       <button type="submit">Ajouter la tente</button>
-      <button type="button" onclick="chargerDonnees()">Afficher toutes les tentes</button>
+      <button type="button" onclick="window.open(sheetURL, '_blank')">Afficher toutes les tentes</button>
+      <button type="button" onclick="reinitialiserListe()">Réinitialiser la liste</button>
     </form>
 
     <div id="listeTentes"></div>
@@ -260,6 +177,10 @@
             liste.appendChild(div);
           });
         });
+    }
+
+    function reinitialiserListe() {
+      document.getElementById('listeTentes').innerHTML = '';
     }
   </script>
 </body>
