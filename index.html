@@ -255,7 +255,7 @@
               Bananes : ${cols[14]}<br>
               Maillet : ${cols[15]}<br>
               Remarques : ${cols[16]}<br>
-              Date d'ajout : ${cols[17] || ''}
+              Date d'ajout : ${new Date(cols[17]).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }) || ''}
             `;
             liste.appendChild(div);
           });
