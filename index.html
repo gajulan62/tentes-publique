@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventaire Tentes</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventaire GTR Tentes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -165,7 +165,6 @@
       <button type="button" onclick="chargerDonnees()">Afficher toutes les tentes</button>
     </form>
 
-    <!-- Résultats -->
     <div id="listeTentesContainer">
       <h2>Tentes enregistrées</h2>
       <div id="listeTentes"></div>
@@ -233,8 +232,8 @@
         body: JSON.stringify(tente)
       }).then(() => {
         alert("Tente ajoutée avec succès !");
+        afficherTente(tente); // Affiche immédiatement la nouvelle tente
         document.querySelector('form.form-section').reset();
-        chargerDonnees();
       });
     }
 
@@ -243,33 +242,65 @@
         .then(response => response.text())
         .then(text => {
           const rows = text.trim().split('\n');
+          const headers = rows[0].split(',');
+          const data = rows.slice(1);
           const liste = document.getElementById('listeTentes');
           liste.innerHTML = '';
 
-          rows.slice(1).forEach(row => {
+          data.forEach(row => {
             const cols = row.split(',');
-            const div = document.createElement('div');
-            div.className = 'tent-entry';
-            div.innerHTML = `
-              <strong>Tente #${cols[0]}</strong><br>
-              Dernier utilisateur : ${cols[1]}<br>
-              Double toit présent : ${cols[2]} | Endommagé : ${cols[3]} (${cols[4]})<br>
-              Toit présent : ${cols[5]} | Endommagé : ${cols[6]} (${cols[7]})<br>
-              Tapis : ${cols[8]} | Endommagé : ${cols[9]} (${cols[10]})<br>
-              Piquets : ${cols[11]}<br>
-              Sardines : ${cols[12]}<br>
-              Maquereaux : ${cols[13]}<br>
-              Bananes : ${cols[14]}<br>
-              Maillet : ${cols[15]}<br>
-              Remarques : ${cols[16]}<br>
-              Date d'ajout : ${new Date(cols[17]).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }) || ''}
-            `;
-            liste.appendChild(div);
+            const tente = {
+              nom: cols[0],
+              utilisateur: cols[1],
+              doubleToit: {
+                present: cols[2],
+                endommage: cols[3],
+                remarque: cols[4],
+              },
+              toit: {
+                present: cols[5],
+                endommage: cols[6],
+                remarque: cols[7],
+              },
+              tapis: {
+                present: cols[8],
+                endommage: cols[9],
+                remarque: cols[10],
+              },
+              piquets: cols[11],
+              sardines: cols[12],
+              maquereaux: cols[13],
+              bananes: cols[14],
+              maille: cols[15],
+              remarques: cols[16],
+              date: cols[17]
+            };
+            afficherTente(tente);
           });
 
-          // Scroll vers la liste
           document.getElementById('listeTentesContainer').scrollIntoView({ behavior: 'smooth' });
         });
+    }
+
+    function afficherTente(tente) {
+      const liste = document.getElementById('listeTentes');
+      const div = document.createElement('div');
+      div.className = 'tent-entry';
+      div.innerHTML = `
+        <strong>Tente #${tente.nom}</strong><br>
+        Dernier utilisateur : ${tente.utilisateur} <br>
+        <div class="equipment-item"><strong>Double toit</strong>: ${tente.doubleToit.present} / Endommagé: ${tente.doubleToit.endommage} (${tente.doubleToit.remarque})</div>
+        <div class="equipment-item"><strong>Toit</strong>: ${tente.toit.present} / Endommagé: ${tente.toit.endommage} (${tente.toit.remarque})</div>
+        <div class="equipment-item"><strong>Tapis</strong>: ${tente.tapis.present} / Endommagé: ${tente.tapis.endommage} (${tente.tapis.remarque})</div>
+        <div class="equipment-item"><strong>Piquets complets:</strong> ${tente.piquets}</div>
+        <div class="equipment-item"><strong>Sardines:</strong> ${tente.sardines}</div>
+        <div class="equipment-item"><strong>Maquereaux:</strong> ${tente.maquereaux}</div>
+        <div class="equipment-item"><strong>Bananes:</strong> ${tente.bananes}</div>
+        <div class="equipment-item"><strong>Maillet présent:</strong> ${tente.maille}</div>
+        <div class="equipment-item"><strong>Remarques:</strong> ${tente.remarques}</div>
+        <div class="equipment-item"><strong>Date d'ajout:</strong> ${new Date(tente.date).toLocaleString('fr-FR')}</div>
+      `;
+      liste.appendChild(div);
     }
   </script>
 </body>
