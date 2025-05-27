@@ -20,7 +20,7 @@
     .container {
       padding: 1em;
     }
-    .form-section {
+    form.form-section {
       background: white;
       padding: 1em;
       border-radius: 8px;
@@ -62,7 +62,7 @@
     <h1>Inventaire des Tentes</h1>
   </header>
   <div class="container">
-    <div class="form-section">
+    <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
       <label>Numéro de la tente:
         <input type="text" id="nom" required>
       </label>
@@ -154,9 +154,9 @@
         <textarea id="remarques"></textarea>
       </label>
 
-      <button onclick="ajouterTente()">Ajouter la tente</button>
-      <button onclick="chargerDonnees()">Afficher toutes les tentes</button>
-    </div>
+      <button type="submit">Ajouter la tente</button>
+      <button type="button" onclick="chargerDonnees()">Afficher toutes les tentes</button>
+    </form>
 
     <div id="listeTentes"></div>
   </div>
@@ -213,6 +213,7 @@
         body: JSON.stringify(tente)
       }).then(() => {
         alert("Tente ajoutée avec succès !");
+        document.querySelector('form.form-section').reset();
         chargerDonnees();
       });
     }
