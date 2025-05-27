@@ -67,12 +67,13 @@
         <input type="text" id="nom" required>
       </label>
       <label>Dernier utilisateur:
-        <input type="text" id="utilisateur">
+        <input type="text" id="utilisateur" required>
       </label>
 
       <h3>Double toit</h3>
       <label>Présent:
-        <select id="doubleToit-present">
+        <select id="doubleToit-present" required>
+          <option value="">-- Sélectionner --</option>
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
@@ -89,7 +90,8 @@
 
       <h3>Toit</h3>
       <label>Présent:
-        <select id="toit-present">
+        <select id="toit-present" required>
+          <option value="">-- Sélectionner --</option>
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
@@ -129,19 +131,20 @@
       </label>
 
       <label>Nombre de sardines:
-        <input type="number" id="sardines">
+        <input type="number" id="sardines" required>
       </label>
 
       <label>Nombre de maquereaux:
-        <input type="number" id="maquereaux">
+        <input type="number" id="maquereaux" required>
       </label>
 
       <label>Nombre de bananes:
-        <input type="number" id="bananes">
+        <input type="number" id="bananes" required>
       </label>
 
       <label>Maillet présent ?
-        <select id="maille">
+        <select id="maille" required>
+          <option value="">-- Sélectionner --</option>
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
@@ -152,6 +155,7 @@
       </label>
 
       <button onclick="ajouterTente()">Ajouter la tente</button>
+      <button onclick="chargerDonnees()">Afficher toutes les tentes</button>
     </div>
 
     <div id="listeTentes"></div>
@@ -159,8 +163,20 @@
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyVIYGEs4u_5R2kvFwfITAv03B6FLqSpRHQt3qrCreCKxGv6VoNzAmOodFkLXQNteUI/exec";
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6z4xxlNQKwUYYFteyfuS-qY4r6taZ_BpSk8ZjhwALrA2UoLWmiGoDdli6BqniEhDI0IqRfpOhx7QN/pub?output=csv";
 
     function ajouterTente() {
+      const requiredFields = [
+        'nom', 'utilisateur', 'doubleToit-present', 'toit-present', 'sardines', 'maquereaux', 'bananes', 'maille'
+      ];
+      for (const id of requiredFields) {
+        const el = document.getElementById(id);
+        if (!el.value) {
+          alert("Veuillez remplir tous les champs obligatoires.");
+          return;
+        }
+      }
+
       const tente = {
         nom: document.getElementById('nom').value,
         utilisateur: document.getElementById('utilisateur').value,
@@ -188,11 +204,6 @@
         date: new Date().toISOString()
       };
 
-      if (!tente.nom.trim()) {
-        alert("Le numéro de la tente est obligatoire.");
-        return;
-      }
-
       fetch(scriptURL, {
         method: "POST",
         mode: "no-cors",
@@ -202,30 +213,39 @@
         body: JSON.stringify(tente)
       }).then(() => {
         alert("Tente ajoutée avec succès !");
-        afficherTente(tente);
-        document.querySelector('.form-section').reset();
+        chargerDonnees();
       });
     }
 
-    function afficherTente(tente) {
-      const liste = document.getElementById('listeTentes');
-      const div = document.createElement('div');
-      div.className = 'tent-entry';
-      div.innerHTML = `
-        <strong>Tente #${tente.nom}</strong><br>
-        Dernier utilisateur : ${tente.utilisateur} <br>
-        <div class="equipment-item"><strong>Double toit</strong>: ${tente.doubleToit.present} / Endommagé: ${tente.doubleToit.endommage} (${tente.doubleToit.remarque})</div>
-        <div class="equipment-item"><strong>Toit</strong>: ${tente.toit.present} / Endommagé: ${tente.toit.endommage} (${tente.toit.remarque})</div>
-        <div class="equipment-item"><strong>Tapis</strong>: ${tente.tapis.present} / Endommagé: ${tente.tapis.endommage} (${tente.tapis.remarque})</div>
-        <div class="equipment-item"><strong>Piquets complets:</strong> ${tente.piquets}</div>
-        <div class="equipment-item"><strong>Sardines:</strong> ${tente.sardines}</div>
-        <div class="equipment-item"><strong>Maquereaux:</strong> ${tente.maquereaux}</div>
-        <div class="equipment-item"><strong>Bananes:</strong> ${tente.bananes}</div>
-        <div class="equipment-item"><strong>Maillet présent:</strong> ${tente.maille}</div>
-        <div class="equipment-item"><strong>Remarques:</strong> ${tente.remarques}</div>
-        <div class="equipment-item"><strong>Date d'ajout:</strong> ${new Date(tente.date).toLocaleString('fr-FR')}</div>
-      `;
-      liste.appendChild(div);
+    function chargerDonnees() {
+      fetch(sheetURL)
+        .then(response => response.text())
+        .then(text => {
+          const rows = text.trim().split('\n');
+          const liste = document.getElementById('listeTentes');
+          liste.innerHTML = '';
+
+          rows.slice(1).forEach(row => {
+            const cols = row.split(',');
+            const div = document.createElement('div');
+            div.className = 'tent-entry';
+            div.innerHTML = `
+              <strong>Tente #${cols[0]}</strong><br>
+              Dernier utilisateur : ${cols[1]}<br>
+              Double toit présent : ${cols[2]} | Endommagé : ${cols[3]} (${cols[4]})<br>
+              Toit présent : ${cols[5]} | Endommagé : ${cols[6]} (${cols[7]})<br>
+              Tapis : ${cols[8]} | Endommagé : ${cols[9]} (${cols[10]})<br>
+              Piquets : ${cols[11]}<br>
+              Sardines : ${cols[12]}<br>
+              Maquereaux : ${cols[13]}<br>
+              Bananes : ${cols[14]}<br>
+              Maillet : ${cols[15]}<br>
+              Remarques : ${cols[16]}<br>
+              Date d'ajout : ${cols[17] || ''}
+            `;
+            liste.appendChild(div);
+          });
+        });
     }
   </script>
 </body>
