@@ -1,4 +1,4 @@
-<!-- ESSAI 10h25 -->
+<!-- ESSAI 10h33 -->
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -207,7 +207,7 @@
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/pub?output=csv";
 
     function ajouterTente() {
-      const requiredFields = ['dateControle', 'nom', 'nbPlaces', 'utilisateur', 'doubleToit-present', 'toit-present', 'sardines', 'maquereaux', 'bananes', 'maille'];
+      const requiredFields = ['dateControle', 'nom', 'nbPlaces', 'utilisateur'];
       let valid = true;
 
       for (const id of requiredFields) {
@@ -248,7 +248,7 @@
         "Observation : travaux à faire": document.getElementById('observationTravaux').value,
         "Travaux réalisées": document.getElementById('travauxRealises').value,
         "derniere Utilisation": document.getElementById('derniereUtilisation').value,
-        "Remarques gloables": document.getElementById('remarquesGlobales').value
+        "Remarques Globales": document.getElementById('remarquesGlobales').value
       };
 
       fetch(scriptURL, {
@@ -301,35 +301,29 @@ function chargerDonnees() {
           rows.slice(1).forEach(row => {
             const cols = row.split(',');
             const tente = {
-              dateControle: cols[0],
-              nom: cols[1],
-              nbPlaces: cols[2],
-              dateAchat: cols[3],
-              utilisateur: cols[4],
-              doubleToit: {
-                present: cols[5],
-                endommage: cols[6],
-                remarque: cols[7],
-              },
-              toit: {
-                present: cols[8],
-                endommage: cols[9],
-                remarque: cols[10],
-              },
-              tapis: {
-                present: cols[11],
-                endommage: cols[12],
-                remarque: cols[13],
-              },
-              piquets: cols[14],
-              sardines: cols[15],
-              maquereaux: cols[16],
-              bananes: cols[17],
-              maille: cols[18],
-              observationTravaux: cols[19],
-              travauxRealises: cols[20],
-              derniereUtilisation: cols[21],
-              remarquesGlobales: cols[22],
+              "Date contrôle": cols[0],
+              "Numéro tente": cols[1],
+              "Nb places": cols[2],
+              "Date achat": cols[3],
+              "Utilisateur": cols[4],
+              "Double toit - Présent": cols[5],
+              "Double toit - Endommagé": cols[6],
+              "Double toit - Remarque": cols[7],
+              "Toit - Présent": cols[8],
+              "Toit - Endommagé": cols[9],
+              "Toit - Remarque": cols[10],
+              "Tapis - Présent": cols[11],
+              "Tapis - Endommagé": cols[12],
+              "Tapis - Remarque": cols[13],
+              "Piquets complets": cols[14],
+              "Sardines": cols[15],
+              "Maquereaux": cols[16],
+              "Bananes": cols[17],
+              "Maillet présent": cols[18],
+              "Observation : travaux à faire": cols[19],
+              "Travaux réalisées": cols[20],
+              "Dernière Utilisation": cols[21],
+              "Remarques globales": cols[22],
               date: new Date().toISOString()
             };
             afficherTente(tente);
