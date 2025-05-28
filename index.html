@@ -68,6 +68,7 @@
   <header>
     <h1>Inventaire des Tentes</h1>
     <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV </button>
+    <button type="button" onclick="chargerDonnees()">Afficher l'inventaire tente</button>
   </header>
   <div class="container">
     <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
@@ -163,7 +164,7 @@
       </label>
 
       <button type="submit">Ajouter la tente</button>
-      <button type="button" onclick="chargerDonnees()">Afficher l'inventaire tente</button>
+      
     </form>
 
     <!-- Résultats -->
