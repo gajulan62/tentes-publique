@@ -251,15 +251,22 @@
         "Remarques Globales": document.getElementById('RemarquesGlobales').value
       };
 
+        <!-- ESSAI sans no-cors -->
+        <!-- mode: "no-cors",-->
+      
       fetch(scriptURL, {
         method: "POST",
-        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tente)
-      }).then(() => {
+      })
+      .then(response => response.text())
+      .then(text => {
         alert("Tente ajoutée avec succès !");
         document.querySelector('form.form-section').reset();
         chargerDonnees();
+      })
+      .catch(err => {
+        alert("Erreur lors de l'ajout : " + err.message);
       });
     }
 
