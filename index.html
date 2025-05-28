@@ -80,6 +80,8 @@
     </div>
   </div>
 
+  <h2>Comment ajouter une nouvelle tente</h2>
+
       <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
       <label>Numéro de la tente:
         <input type="text" id="nom" required>
@@ -183,63 +185,70 @@
     const scriptURL = "https://script.google.com/macros/s/AKfycbx-R6ip1_BcZ8VniJZRI2nCa2iynspKSlZp-fobEfcS7-OjSSa4RlEVkRA3Fuybwj1I/exec";
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/pub?output=csv";
 
-    function ajouterTente() {
-      const requiredFields = ['nom', 'utilisateur', 'doubleToit-present', 'toit-present', 'sardines', 'maquereaux', 'bananes', 'maille'];
-      let valid = true;
+function ajouterTente() {
+  const requiredFields = ['nom', 'utilisateur', 'doubleToit-present', 'toit-present', 'sardines', 'maquereaux', 'bananes', 'maille'];
+  let valid = true;
 
-      for (const id of requiredFields) {
-        const el = document.getElementById(id);
-        if (!el.value) {
-          el.classList.add("error");
-          valid = false;
-        } else {
-          el.classList.remove("error");
-        }
-      }
-
-      if (!valid) {
-        alert("Veuillez remplir tous les champs obligatoires.");
-        return;
-      }
-
-      const tente = {
-        nom: document.getElementById('nom').value,
-        utilisateur: document.getElementById('utilisateur').value,
-        doubleToit: {
-          present: document.getElementById('doubleToit-present').value,
-          endommage: document.getElementById('doubleToit-endommage').value,
-          remarque: document.getElementById('doubleToit-remarque').value,
-        },
-        toit: {
-          present: document.getElementById('toit-present').value,
-          endommage: document.getElementById('toit-endommage').value,
-          remarque: document.getElementById('toit-remarque').value,
-        },
-        tapis: {
-          present: document.getElementById('tapis-present').value,
-          endommage: document.getElementById('tapis-endommage').value,
-          remarque: document.getElementById('tapis-remarque').value,
-        },
-        piquets: document.getElementById('piquets').value,
-        sardines: document.getElementById('sardines').value,
-        maquereaux: document.getElementById('maquereaux').value,
-        bananes: document.getElementById('bananes').value,
-        maille: document.getElementById('maille').value,
-        remarques: document.getElementById('remarques').value,
-        date: new Date().toISOString()
-      };
-
-      fetch(scriptURL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(tente)
-      }).then(() => {
-        alert("Tente ajoutée avec succès !");
-        document.querySelector('form.form-section').reset();
-        chargerDonnees();
-      });
+  for (const id of requiredFields) {
+    const el = document.getElementById(id);
+    if (!el.value) {
+      el.classList.add("error");
+      valid = false;
+    } else {
+      el.classList.remove("error");
     }
+  }
+
+  if (!valid) {
+    alert("Veuillez remplir tous les champs obligatoires.");
+    return;
+  }
+
+  const tente = {
+    dateControle: document.getElementById('dateControle').value,
+    nom: document.getElementById('nom').value,
+    nbPlaces: document.getElementById('nbPlaces').value,
+    dateAchat: document.getElementById('dateAchat').value,
+    utilisateur: document.getElementById('utilisateur').value,
+    doubleToit: {
+      present: document.getElementById('doubleToit-present').value,
+      endommage: document.getElementById('doubleToit-endommage').value,
+      remarque: document.getElementById('doubleToit-remarque').value,
+    },
+    toit: {
+      present: document.getElementById('toit-present').value,
+      endommage: document.getElementById('toit-endommage').value,
+      remarque: document.getElementById('toit-remarque').value,
+    },
+    tapis: {
+      present: document.getElementById('tapis-present').value,
+      endommage: document.getElementById('tapis-endommage').value,
+      remarque: document.getElementById('tapis-remarque').value,
+    },
+    piquets: document.getElementById('piquets').value,
+    sardines: document.getElementById('sardines').value,
+    maquereaux: document.getElementById('maquereaux').value,
+    bananes: document.getElementById('bananes').value,
+    maille: document.getElementById('maille').value,
+    observationTravaux: document.getElementById('observationTravaux').value,
+    travauxRealises: document.getElementById('travauxRealises').value,
+    derniereUtilisation: document.getElementById('derniereUtilisation').value,
+    remarquesGlobales: document.getElementById('remarquesGlobales').value,
+    date: new Date().toISOString()
+  };
+
+  fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(tente)
+  }).then(() => {
+    alert("Tente ajoutée avec succès !");
+    document.querySelector('form.form-section').reset();
+    chargerDonnees();
+  });
+}
+
 
     function afficherTente(tente) {
       const liste = document.getElementById('listeTentes');
@@ -261,37 +270,55 @@
       `;
       liste.appendChild(div);
     }
-
+    
+<!-- fonctionnel avec les nouvelles colonnes-->
     function chargerDonnees() {
-      fetch(sheetURL)
-        .then(response => response.text())
-        .then(text => {
-          const rows = text.trim().split('\n');
-          const liste = document.getElementById('listeTentes');
-          liste.innerHTML = '';
+  fetch(sheetURL)
+    .then(response => response.text())
+    .then(text => {
+      const rows = text.trim().split('\n');
+      const liste = document.getElementById('listeTentes');
+      liste.innerHTML = '';
 
-          rows.slice(1).forEach(row => {
-            const cols = row.split(',');
-            const tente = {
-              nom: cols[0],
-              utilisateur: cols[1],
-              doubleToit: { present: cols[2], endommage: cols[3], remarque: cols[4] },
-              toit: { present: cols[5], endommage: cols[6], remarque: cols[7] },
-              tapis: { present: cols[8], endommage: cols[9], remarque: cols[10] },
-              piquets: cols[11],
-              sardines: cols[12],
-              maquereaux: cols[13],
-              bananes: cols[14],
-              maille: cols[15],
-              remarques: cols[16],
-              date: cols[17]
-            };
-            afficherTente(tente);
-          });
+      rows.slice(1).forEach(row => {
+        const cols = row.split(',');
+        const tente = {
+          dateControle: cols[0],
+          nom: cols[1],
+          nbPlaces: cols[2],
+          dateAchat: cols[3],
+          utilisateur: cols[4],
+          doubleToit: {
+            present: cols[5],
+            endommage: cols[6],
+            remarque: cols[7],
+          },
+          toit: {
+            present: cols[8],
+            endommage: cols[9],
+            remarque: cols[10],
+          },
+          tapis: {
+            present: cols[11],
+            endommage: cols[12],
+            remarque: cols[13],
+          },
+          piquets: cols[14],
+          sardines: cols[15],
+          maquereaux: cols[16],
+          bananes: cols[17],
+          maille: cols[18],
+          observationTravaux: cols[19],
+          travauxRealises: cols[20],
+          derniereUtilisation: cols[21],
+          remarquesGlobales: cols[22],
+        };
+        afficherTente(tente);
+      });
 
-          document.getElementById('listeTentesContainer').scrollIntoView({ behavior: 'smooth' });
-        });
-    }
+      document.getElementById('listeTentesContainer').scrollIntoView({ behavior: 'smooth' });
+    });
+}
 
     function ouvrirOngletInventaire() {
       window.open(sheetURL, '_blank');
