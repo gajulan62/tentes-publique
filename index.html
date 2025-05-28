@@ -192,8 +192,8 @@
       <input type="date" id="derniereUtilisation">
     </label>
 
-    <label>Remarques globales:
-      <textarea id="remarquesGlobales"></textarea>
+    <label>Remarques Globales:
+      <textarea id="RemarquesGlobales"></textarea>
     </label>
 
     <button type="submit">Ajouter la tente</button>
@@ -248,7 +248,7 @@
         "Observation : travaux à faire": document.getElementById('observationTravaux').value,
         "Travaux réalisées": document.getElementById('travauxRealises').value,
         "derniere Utilisation": document.getElementById('derniereUtilisation').value,
-        "Remarques Globales": document.getElementById('remarquesGlobales').value
+        "Remarques Globales": document.getElementById('RemarquesGlobales').value
       };
 
       fetch(scriptURL, {
@@ -283,8 +283,8 @@
     <div class="equipment-item"><strong>Observation : travaux à faire:</strong> ${tente["Observation : travaux à faire"] || 'Aucune'}</div>
     <div class="equipment-item"><strong>Travaux réalisées:</strong> ${tente["Travaux réalisées"] || 'Aucun'}</div>
     <div class="equipment-item"><strong>Dernière Utilisation:</strong> ${tente["Dernière Utilisation"] || 'N/A'}</div>
-    <div class="equipment-item"><strong>Remarques globales:</strong> ${tente["Remarques globales"] || 'Aucune'}</div>
-    <div class="equipment-item"><strong>Date de contrôle:</strong> ${tente["Date contrôle"] || 'N/A'}</div>
+    <div class="equipment-item"><strong>Remarques Globales:</strong> ${tente["Remarques Globales"] || 'Aucune'}</div>
+    <div class="equipment-item"><strong>Date de contrôle:</strong> ${tente["Date controle"] || 'N/A'}</div>
   `;
   liste.appendChild(div);
 }
@@ -301,7 +301,7 @@ function chargerDonnees() {
           rows.slice(1).forEach(row => {
             const cols = row.split(',');
             const tente = {
-              "Date contrôle": cols[0],
+              "Date controle": cols[0],
               "Numéro tente": cols[1],
               "Nb places": cols[2],
               "Date achat": cols[3],
@@ -323,7 +323,7 @@ function chargerDonnees() {
               "Observation : travaux à faire": cols[19],
               "Travaux réalisées": cols[20],
               "Dernière Utilisation": cols[21],
-              "Remarques globales": cols[22],
+              "Remarques Globales": cols[22],
               date: new Date().toISOString()
             };
             afficherTente(tente);
