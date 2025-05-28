@@ -97,12 +97,12 @@
       <input type="date" id="dateAchat">
     </label>
     <label>Dernier utilisateur:
-      <input type="text" id="utilisateur" required>
+      <input type="text" id="utilisateur" >
     </label>
 
     <h3>Double toit</h3>
     <label>Présent:
-      <select id="doubleToit-present" required>
+      <select id="doubleToit-present" >
         <option value="">-- Sélectionner --</option>
         <option value="oui">Oui</option>
         <option value="non">Non</option>
@@ -120,7 +120,7 @@
 
     <h3>Toit</h3>
     <label>Présent:
-      <select id="toit-present" required>
+      <select id="toit-present" >
         <option value="">-- Sélectionner --</option>
         <option value="oui">Oui</option>
         <option value="non">Non</option>
@@ -161,19 +161,19 @@
     </label>
 
     <label>Nombre de sardines:
-      <input type="number" id="sardines" required>
+      <input type="number" id="sardines" >
     </label>
 
     <label>Nombre de maquereaux:
-      <input type="number" id="maquereaux" required>
+      <input type="number" id="maquereaux" >
     </label>
 
     <label>Nombre de bananes:
-      <input type="number" id="bananes" required>
+      <input type="number" id="bananes" >
     </label>
 
     <label>Maillet présent ?
-      <select id="maille" required>
+      <select id="maillet" >
         <option value="">-- Sélectionner --</option>
         <option value="oui">Oui</option>
         <option value="non">Non</option>
@@ -207,7 +207,7 @@
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/pub?output=csv";
 
     function ajouterTente() {
-      const requiredFields = ['dateControle', 'nom', 'nbPlaces', 'utilisateur'];
+      const requiredFields = ['dateControle', 'nom', 'nbPlaces', 'utilisateur','dateAchat','utilisateur','doubleToit-present','doubleToit-endommage','doubleToit-remarque','toit-present','toit-endommage','tapis-remarque','piquets','sardines','maquereaux','bananes','maillet','observationTravaux'],'travauxRealises','derniereUtilisation','RemarquesGlobales';
       let valid = true;
 
       for (const id of requiredFields) {
@@ -244,7 +244,7 @@
         "Sardines": document.getElementById('sardines').value,
         "Maquereaux": document.getElementById('maquereaux').value,
         "Bananes": document.getElementById('bananes').value,
-        "Maillet présent": document.getElementById('maille').value,
+        "Maillet présent": document.getElementById('maillet').value,
         "Observation : travaux à faire": document.getElementById('observationTravaux').value,
         "Travaux réalisées": document.getElementById('travauxRealises').value,
         "derniere Utilisation": document.getElementById('derniereUtilisation').value,
