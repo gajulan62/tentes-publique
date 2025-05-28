@@ -207,7 +207,14 @@
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/pub?output=csv";
 
     function ajouterTente() {
-      const requiredFields = ['dateControle', 'nom', 'nbPlaces', 'utilisateur','dateAchat','utilisateur','doubleToit-present','doubleToit-endommage','doubleToit-remarque','toit-present','toit-endommage','tapis-remarque','piquets','sardines','maquereaux','bananes','maillet','observationTravaux'],'travauxRealises','derniereUtilisation','RemarquesGlobales';
+      const requiredFields = [
+  'dateControle', 'nom', 'nbPlaces', 'dateAchat', 'utilisateur',
+  'doubleToit-present', 'doubleToit-endommage', 'doubleToit-remarque',
+  'toit-present', 'toit-endommage', 'toit-remarque', // tu oublies toit-remarque dans ta liste
+  'tapis-present', 'tapis-endommage', 'tapis-remarque', // tapis-present et tapis-endommage manquants aussi
+  'piquets', 'sardines', 'maquereaux', 'bananes', 'maillet',
+  'observationTravaux', 'travauxRealises', 'derniereUtilisation', 'RemarquesGlobales'
+];
       let valid = true;
 
       for (const id of requiredFields) {
