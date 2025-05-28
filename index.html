@@ -1,3 +1,4 @@
+<!-- ESSAI 9h16 deplacement bouton  et deplac formulaire reuslktatat inventaire-->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -67,11 +68,19 @@
 <body>
   <header>
     <h1>Inventaire des Tentes</h1>
-    <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV </button>
     <button type="button" onclick="chargerDonnees()">Afficher l'inventaire tente</button>
+    <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV </button>
+   
   </header>
   <div class="container">
-    <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
+  <!-- Résultats -->
+    <div id="listeTentesContainer">
+      <h2>Tentes enregistrées</h2>
+      <div id="listeTentes"></div>
+    </div>
+  </div>
+
+      <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
       <label>Numéro de la tente:
         <input type="text" id="nom" required>
       </label>
@@ -167,12 +176,8 @@
       
     </form>
 
-    <!-- Résultats -->
-    <div id="listeTentesContainer">
-      <h2>Tentes enregistrées</h2>
-      <div id="listeTentes"></div>
-    </div>
-  </div>
+
+
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbx-R6ip1_BcZ8VniJZRI2nCa2iynspKSlZp-fobEfcS7-OjSSa4RlEVkRA3Fuybwj1I/exec";
