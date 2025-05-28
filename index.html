@@ -1,9 +1,11 @@
+<!-- ESSAI 10h25 -->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inventaire des Tentes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventaire Tentes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -31,7 +33,7 @@
       display: block;
       margin-top: 10px;
     }
-    select, input[type="text"], input[type="number"], input[type="date"], textarea {
+    select, input[type="text"], input[type="number"], textarea {
       width: 100%;
       padding: 0.5em;
       margin-top: 5px;
@@ -67,19 +69,21 @@
 <body>
   <header>
     <h1>Inventaire des Tentes</h1>
-    <button type="button" onclick="chargerDonnees()">Afficher l'inventaire des tentes</button>
-    <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV</button>
+    <button type="button" onclick="chargerDonnees()">Afficher l'inventaire tente</button>
+    <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV </button>
+   
   </header>
   <div class="container">
+  <!-- Résultats -->
     <div id="listeTentesContainer">
       <h2>Tentes enregistrées</h2>
       <div id="listeTentes"></div>
     </div>
   </div>
 
-  <h2>Comment ajouter une nouvelle tente</h2>
-
-  <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
+ <h2>Comment ajouter une nouvelle tente</h2>
+ 
+      <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
     <label>Date de contrôle:
       <input type="date" id="dateControle" required>
     </label>
@@ -195,6 +199,9 @@
     <button type="submit">Ajouter la tente</button>
   </form>
 
+
+
+
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbzDWGH3TrZZM3BJsWcT-n8FYMODIMWBbPyMU1pUxf4dD5O3Ly_Q3NpOFLT7UMrolNnl/exec";
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/pub?output=csv";
@@ -246,6 +253,96 @@
 
       fetch(scriptURL, {
         method: "POST",
-        mode
-::contentReference[oaicite:7]{index=7}
- 
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(tente)
+      }).then(() => {
+        alert("Tente ajoutée avec succès !");
+        document.querySelector('form.form-section').reset();
+        chargerDonnees();
+      });
+    }
+
+    function afficherTente(tente) {
+  const liste = document.getElementById('listeTentes');
+  const div = document.createElement('div');
+  div.className = 'tent-entry';
+  div.innerHTML = `
+    <strong>Tente #${tente["Numéro tente"] || 'N/A'}</strong><br>
+    <strong>Nb places:</strong> ${tente["Nb places"] || 'N/A'}<br>
+    <strong>Date achat:</strong> ${tente["Date achat"] || 'N/A'}<br>
+    <strong>Dernier utilisateur:</strong> ${tente["Utilisateur"] || 'N/A'}<br>
+    <div class="equipment-item"><strong>Double toit</strong>: ${tente["Double toit - Présent"] || 'N/A'} / Endommagé: ${tente["Double toit - Endommagé"] || 'N/A'} (${tente["Double toit - Remarque"] || 'Aucune'})</div>
+    <div class="equipment-item"><strong>Toit</strong>: ${tente["Toit - Présent"] || 'N/A'} / Endommagé: ${tente["Toit - Endommagé"] || 'N/A'} (${tente["Toit - Remarque"] || 'Aucune'})</div>
+    <div class="equipment-item"><strong>Tapis</strong>: ${tente["Tapis - Présent"] || 'N/A'} / Endommagé: ${tente["Tapis - Endommagé"] || 'N/A'} (${tente["Tapis - Remarque"] || 'Aucune'})</div>
+    <div class="equipment-item"><strong>Piquets complets:</strong> ${tente["Piquets complets"] || 'N/A'}</div>
+    <div class="equipment-item"><strong>Sardines:</strong> ${tente["Sardines"] || '0'}</div>
+    <div class="equipment-item"><strong>Maquereaux:</strong> ${tente["Maquereaux"] || '0'}</div>
+    <div class="equipment-item"><strong>Bananes:</strong> ${tente["Bananes"] || '0'}</div>
+    <div class="equipment-item"><strong>Maillet présent:</strong> ${tente["Maillet présent"] || 'Non'}</div>
+    <div class="equipment-item"><strong>Observation : travaux à faire:</strong> ${tente["Observation : travaux à faire"] || 'Aucune'}</div>
+    <div class="equipment-item"><strong>Travaux réalisées:</strong> ${tente["Travaux réalisées"] || 'Aucun'}</div>
+    <div class="equipment-item"><strong>Dernière Utilisation:</strong> ${tente["Dernière Utilisation"] || 'N/A'}</div>
+    <div class="equipment-item"><strong>Remarques globales:</strong> ${tente["Remarques globales"] || 'Aucune'}</div>
+    <div class="equipment-item"><strong>Date de contrôle:</strong> ${tente["Date contrôle"] || 'N/A'}</div>
+  `;
+  liste.appendChild(div);
+}
+
+
+function chargerDonnees() {
+      fetch(sheetURL)
+        .then(response => response.text())
+        .then(text => {
+          const rows = text.trim().split('\n');
+          const liste = document.getElementById('listeTentes');
+          liste.innerHTML = '';
+
+          rows.slice(1).forEach(row => {
+            const cols = row.split(',');
+            const tente = {
+              dateControle: cols[0],
+              nom: cols[1],
+              nbPlaces: cols[2],
+              dateAchat: cols[3],
+              utilisateur: cols[4],
+              doubleToit: {
+                present: cols[5],
+                endommage: cols[6],
+                remarque: cols[7],
+              },
+              toit: {
+                present: cols[8],
+                endommage: cols[9],
+                remarque: cols[10],
+              },
+              tapis: {
+                present: cols[11],
+                endommage: cols[12],
+                remarque: cols[13],
+              },
+              piquets: cols[14],
+              sardines: cols[15],
+              maquereaux: cols[16],
+              bananes: cols[17],
+              maille: cols[18],
+              observationTravaux: cols[19],
+              travauxRealises: cols[20],
+              derniereUtilisation: cols[21],
+              remarquesGlobales: cols[22],
+              date: new Date().toISOString()
+            };
+            afficherTente(tente);
+          });
+
+          document.getElementById('listeTentesContainer').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
+
+    function ouvrirOngletInventaire() {
+      window.open(sheetURL, '_blank');
+    }
+  </script>
+</body>
+</html>
