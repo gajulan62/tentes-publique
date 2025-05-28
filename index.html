@@ -1,10 +1,11 @@
+operationnelle 18h avant modife colonne
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventaire dddd Tentes</title>
+  <title>Inventaire Tentes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,7 +33,7 @@
       display: block;
       margin-top: 10px;
     }
-    select, input[type="text"], input[type="number"], input[type="date"], textarea {
+    select, input[type="text"], input[type="number"], textarea {
       width: 100%;
       padding: 0.5em;
       margin-top: 5px;
@@ -68,21 +69,12 @@
 <body>
   <header>
     <h1>Inventaire des Tentes</h1>
-    <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV</button>
+    <button onclick="ouvrirOngletInventaire()">Exporter toutes les tentes en CSV </button>
   </header>
   <div class="container">
     <form class="form-section" onsubmit="event.preventDefault(); ajouterTente();">
-      <label>Date de contrôle:
-        <input type="date" id="date-controle" required>
-      </label>
-      <label>Numéro de tente:
-        <input type="number" id="numero-tente" required>
-      </label>
-      <label>Nombre de places:
-        <input type="number" id="nb-places" required>
-      </label>
-      <label>Date d'achat:
-        <input type="date" id="date-achat" required>
+      <label>Numéro de la tente:
+        <input type="text" id="nom" required>
       </label>
       <label>Dernier utilisateur:
         <input type="text" id="utilisateur" required>
@@ -97,7 +89,7 @@
         </select>
       </label>
       <label>Endommagé:
-        <select id="doubleToit-endommage" required>
+        <select id="doubleToit-endommage">
           <option value="non">Non</option>
           <option value="oui">Oui</option>
         </select>
@@ -115,7 +107,7 @@
         </select>
       </label>
       <label>Endommagé:
-        <select id="toit-endommage" required>
+        <select id="toit-endommage">
           <option value="non">Non</option>
           <option value="oui">Oui</option>
         </select>
@@ -126,13 +118,13 @@
 
       <h3>Tapis de sol</h3>
       <label>Présent:
-        <select id="tapis-present" required>
+        <select id="tapis-present">
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
       </label>
       <label>Endommagé:
-        <select id="tapis-endommage" required>
+        <select id="tapis-endommage">
           <option value="non">Non</option>
           <option value="oui">Oui</option>
         </select>
@@ -142,7 +134,7 @@
       </label>
 
       <label>Piquets complets ?
-        <select id="piquets" required>
+        <select id="piquets">
           <option value="oui">Oui</option>
           <option value="non">Non</option>
         </select>
@@ -168,26 +160,15 @@
         </select>
       </label>
 
-      <label>Observation : travaux à faire:
-        <input type="text" id="travaux-a-faire">
-      </label>
-
-      <label>Travaux réalisées:
-        <input type="text" id="travaux-realises">
-      </label>
-
-      <label>Dernière utilisation:
-        <input type="date" id="derniere-utilisation">
-      </label>
-
       <label>Remarques:
-        <input type="text" id="remarques">
+        <textarea id="remarques"></textarea>
       </label>
 
       <button type="submit">Ajouter la tente</button>
       <button type="button" onclick="chargerDonnees()">Afficher l'inventaire tente</button>
     </form>
 
+    <!-- Résultats -->
     <div id="listeTentesContainer">
       <h2>Tentes enregistrées</h2>
       <div id="listeTentes"></div>
@@ -195,11 +176,11 @@
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbx-R6ip1_BcZ8VniJZRI2nCa2iynspKSlZp-fobEfcS7-OjSSa4RlEVkRA3Fuybwj1I/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyVIYGEs4u_5R2kvFwfITAv03B6FLqSpRHQt3qrCreCKxGv6VoNzAmOodFkLXQNteUI/exec";
     const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQwnYaQe1NxhepYNTBeF3Hvn-nwko3mqCfVSOZZxUvRFSBAxL8w84y1igO29g23g3GmrXmO7xtuRpKo/pub?output=csv";
 
     function ajouterTente() {
-      const requiredFields = ['date-controle', 'numero-tente', 'nb-places', 'date-achat', 'utilisateur', 'doubleToit-present', 'doubleToit-endommage', 'toit-present', 'toit-endommage', 'tapis-present', 'tapis-endommage', 'piquets', 'sardines', 'maquereaux', 'bananes', 'maille'];
+      const requiredFields = ['nom', 'utilisateur', 'doubleToit-present', 'toit-present', 'sardines', 'maquereaux', 'bananes', 'maille'];
       let valid = true;
 
       for (const id of requiredFields) {
@@ -218,29 +199,30 @@
       }
 
       const tente = {
-        "Date controle": document.getElementById('date-controle').value,
-        "Numéro tente": document.getElementById('numero-tente').value,
-        "Nb places": document.getElementById('nb-places').value,
-        "Date achat": document.getElementById('date-achat').value,
-        "utilisateur": document.getElementById('utilisateur').value,
-        "Double toit - Présent": document.getElementById('doubleToit-present').value,
-        "Double toit - Endommagé": document.getElementById('doubleToit-endommage').value,
-        "Double toit - Remarque": document.getElementById('doubleToit-remarque').value,
-        "Toit - Présent": document.getElementById('toit-present').value,
-        "Toit - Endommagé": document.getElementById('toit-endommage').value,
-        "Toit - Remarque": document.getElementById('toit-remarque').value,
-        "Tapis - Présent": document.getElementById('tapis-present').value,
-        "Tapis - Endommagé": document.getElementById('tapis-endommage').value,
-        "Tapis - Remarque": document.getElementById('tapis-remarque').value,
-        "Piquets complets": document.getElementById('piquets').value,
-        "Sardines": document.getElementById('sardines').value,
-        "Maquereaux": document.getElementById('maquereaux').value,
-        "Bananes": document.getElementById('bananes').value,
-        "Maillet présent": document.getElementById('maille').value,
-        "Observation : travaux à faire": document.getElementById('travaux-a-faire').value,
-        "Travaux réalisées": document.getElementById('travaux-realises').value,
-        "derniere Utilisation": document.getElementById('derniere-utilisation').value,
-        "Remarques": document.getElementById('remarques').value
+        nom: document.getElementById('nom').value,
+        utilisateur: document.getElementById('utilisateur').value,
+        doubleToit: {
+          present: document.getElementById('doubleToit-present').value,
+          endommage: document.getElementById('doubleToit-endommage').value,
+          remarque: document.getElementById('doubleToit-remarque').value,
+        },
+        toit: {
+          present: document.getElementById('toit-present').value,
+          endommage: document.getElementById('toit-endommage').value,
+          remarque: document.getElementById('toit-remarque').value,
+        },
+        tapis: {
+          present: document.getElementById('tapis-present').value,
+          endommage: document.getElementById('tapis-endommage').value,
+          remarque: document.getElementById('tapis-remarque').value,
+        },
+        piquets: document.getElementById('piquets').value,
+        sardines: document.getElementById('sardines').value,
+        maquereaux: document.getElementById('maquereaux').value,
+        bananes: document.getElementById('bananes').value,
+        maille: document.getElementById('maille').value,
+        remarques: document.getElementById('remarques').value,
+        date: new Date().toISOString()
       };
 
       fetch(scriptURL, {
@@ -260,23 +242,18 @@
       const div = document.createElement('div');
       div.className = 'tent-entry';
       div.innerHTML = `
-        <strong>Tente #${tente["Numéro tente"]}</strong><br>
-        Date de contrôle : ${tente["Date controle"]} <br>
-        Nombre de places : ${tente["Nb places"]} <br>
-        Date d'achat : ${tente["Date achat"]} <br>
-        Dernier utilisateur : ${tente["utilisateur"]} <br>
-        <div class="equipment-item"><strong>Double toit</strong>: ${tente["Double toit - Présent"]} / Endommagé: ${tente["Double toit - Endommagé"]} (${tente["Double toit - Remarque"]})</div>
-        <div class="equipment-item"><strong>Toit</strong>: ${tente["Toit - Présent"]} / Endommagé: ${tente["Toit - Endommagé"]} (${tente["Toit - Remarque"]})</div>
-        <div class="equipment-item"><strong>Tapis</strong>: ${tente["Tapis - Présent"]} / Endommagé: ${tente["Tapis - Endommagé"]} (${tente["Tapis - Remarque"]})</div>
-        <div class="equipment-item"><strong>Piquets complets:</strong> ${tente["Piquets complets"]}</div>
-        <div class="equipment-item"><strong>Sardines:</strong> ${tente["Sardines"]}</div>
-        <div class="equipment-item"><strong>Maquereaux:</strong> ${tente["Maquereaux"]}</div>
-        <div class="equipment-item"><strong>Bananes:</strong> ${tente["Bananes"]}</div>
-        <div class="equipment-item"><strong>Maillet présent:</strong> ${tente["Maillet présent"]}</div>
-        <div class="equipment-item"><strong>Observation : travaux à faire:</strong> ${tente["Observation : travaux à faire"]}</div>
-        <div class="equipment-item"><strong>Travaux réalisées:</strong> ${tente["Travaux réalisées"]}</div>
-        <div class="equipment-item"><strong>Dernière utilisation:</strong> ${tente["derniere Utilisation"]}</div>
-        <div class="equipment-item"><strong>Remarques:</strong> ${tente["Remarques"]}</div>
+        <strong>Tente #${tente.nom}</strong><br>
+        Dernier utilisateur : ${tente.utilisateur} <br>
+        <div class="equipment-item"><strong>Double toit</strong>: ${tente.doubleToit.present} / Endommagé: ${tente.doubleToit.endommage} (${tente.doubleToit.remarque})</div>
+        <div class="equipment-item"><strong>Toit</strong>: ${tente.toit.present} / Endommagé: ${tente.toit.endommage} (${tente.toit.remarque})</div>
+        <div class="equipment-item"><strong>Tapis</strong>: ${tente.tapis.present} / Endommagé: ${tente.tapis.endommage} (${tente.tapis.remarque})</div>
+        <div class="equipment-item"><strong>Piquets complets:</strong> ${tente.piquets}</div>
+        <div class="equipment-item"><strong>Sardines:</strong> ${tente.sardines}</div>
+        <div class="equipment-item"><strong>Maquereaux:</strong> ${tente.maquereaux}</div>
+        <div class="equipment-item"><strong>Bananes:</strong> ${tente.bananes}</div>
+        <div class="equipment-item"><strong>Maillet présent:</strong> ${tente.maille}</div>
+        <div class="equipment-item"><strong>Remarques:</strong> ${tente.remarques}</div>
+        <div class="equipment-item"><strong>Date d'ajout:</strong> ${new Date(tente.date).toLocaleString('fr-FR')}</div>
       `;
       liste.appendChild(div);
     }
@@ -285,37 +262,25 @@
       fetch(sheetURL)
         .then(response => response.text())
         .then(text => {
-          const rows = text.trim().split('
-');
+          const rows = text.trim().split('\n');
           const liste = document.getElementById('listeTentes');
           liste.innerHTML = '';
 
           rows.slice(1).forEach(row => {
             const cols = row.split(',');
             const tente = {
-              "Date controle": cols[0],
-              "Numéro tente": cols[1],
-              "Nb places": cols[2],
-              "Date achat": cols[3],
-              "utilisateur": cols[4],
-              "Double toit - Présent": cols[5],
-              "Double toit - Endommagé": cols[6],
-              "Double toit - Remarque": cols[7],
-              "Toit - Présent": cols[8],
-              "Toit - Endommagé": cols[9],
-              "Toit - Remarque": cols[10],
-              "Tapis - Présent": cols[11],
-              "Tapis - Endommagé": cols[12],
-              "Tapis - Remarque": cols[13],
-              "Piquets complets": cols[14],
-              "Sardines": cols[15],
-              "Maquereaux": cols[16],
-              "Bananes": cols[17],
-              "Maillet présent": cols[18],
-              "Observation : travaux à faire": cols[19],
-              "Travaux réalisées": cols[20],
-              "derniere Utilisation": cols[21],
-              "Remarques": cols[22]
+              nom: cols[0],
+              utilisateur: cols[1],
+              doubleToit: { present: cols[2], endommage: cols[3], remarque: cols[4] },
+              toit: { present: cols[5], endommage: cols[6], remarque: cols[7] },
+              tapis: { present: cols[8], endommage: cols[9], remarque: cols[10] },
+              piquets: cols[11],
+              sardines: cols[12],
+              maquereaux: cols[13],
+              bananes: cols[14],
+              maille: cols[15],
+              remarques: cols[16],
+              date: cols[17]
             };
             afficherTente(tente);
           });
