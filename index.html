@@ -188,7 +188,7 @@
       <textarea id="travauxRealises"></textarea>
     </label>
 
-    <label>Dernière utilisation:
+    <label>Dernière Utilisation:
       <input type="date" id="derniereUtilisation">
     </label>
 
@@ -254,13 +254,10 @@
         "Maillet présent": document.getElementById('maillet').value,
         "Observation : travaux à faire": document.getElementById('observationTravaux').value,
         "Travaux réalisées": document.getElementById('travauxRealises').value,
-        "derniere Utilisation": document.getElementById('derniereUtilisation').value,
+        "Dernière Utilisation": document.getElementById('derniereUtilisation').value,
         "Remarques Globales": document.getElementById('RemarquesGlobales').value
       };
-
-        <!-- ESSAI sans no-cors -->
-        <!-- mode: "no-cors",-->
-      
+     
       fetch(scriptURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
